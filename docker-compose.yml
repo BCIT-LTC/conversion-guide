@@ -3,17 +3,15 @@ version: "3"
 services:
   app:
     image: conversionguide
-    # image: node:12
     build:
       context: .
-      target: development
-    command: npm run quickly
+      target: builder
+    command: npm run watch
     environment:
       - DEBUG=True
     working_dir: /app
     volumes:
       - .:/app
     ports:
+      - "3000:3000"
       - "3001:3001"
-      - "3002:3002"
-      - "8080:8080"

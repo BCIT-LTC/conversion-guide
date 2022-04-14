@@ -1,13 +1,15 @@
 # Default LTC GitLab CI/CD Pipeline
 #
 ## Requirements
-#   - run `project-init.sh` to generate a GitLab Project Access Token and configure Vault
+#   - this file, with "CLUSTER_NAME" set (bottom of script)
 #   - `Dockerfile` in project root
+#   - (optional) deployment package
 #
 ## General Pipeline Steps
 #   1. Gather info
 #   2. Build Image
-#   3. Trigger deployment pipeline
+#   3. Deploy to a cluster
+#     - main branch deploys to staging/production; other branches deploy to a dev cluster for review
 
 stages:
   - get info
@@ -15,12 +17,20 @@ stages:
   - cleanup
 
 
+## Project initialization
+##  - a project access token is required, and created on the first run. If the pipeline fails,
+##    please wait 5 minutes and re-try after a token has been created.
+project init:
+  stage: get info
+  extends:
+    - .project_init
+
+
 ## Determine if there are existing git tags or a new tag is required
 get info:
   stage: get info
   extends:
-    - .get_gitlab_token
-    - .get_tags
+    - .get_info
 
 
 ## Build image and push to project registry
@@ -31,37 +41,33 @@ build image:
 
 
 ## Deploy feat/fix branch package to dev cluster for review
+#   - must have a deployment package with a `dev` overlay
 deploy review:
   stage: publish
   variables:
     TARGET_ENV: dev
+
   extends:
     - .deploy_review
-    - .deploy_review_environment
     - .deploy_review_rules
 
 
-## Removes dev cluster deployment (and all assets in the branch namespace)
-stop review:
-  stage: cleanup
-  extends:
-    - .undeploy_review
-    - .undeploy_review_environment
-    - .undeploy_review_rules
-
-
-## Deploy staging/production packages (must have a deployment package)
-# - triggers pipelines in "Deployments/{projectName}" project
+## Deploy staging/production packages
+#   - must have a deployment package with `staging` and `production` overlays
+#   - triggers pipelines in "Deployments/{projectName}" project
 deploy to staging:
   stage: publish
   variables:
     TARGET_ENV: staging
+
   extends:
     - .deploy
     - .deploy_staging_rules
+
   environment:
     name: staging
     url: https://$STAGING_HOST/$CI_PROJECT_NAME
+
   tags:
     - staging
 
@@ -70,14 +76,26 @@ deploy to production:
   stage: publish
   variables:
     TARGET_ENV: production
+
   extends:
     - .deploy
     - .deploy_prod_rules
+
   environment:
     name: production
     url: https://${PROD_HOST}/${CI_PROJECT_NAME}
+
   tags:
     - production
+
+
+## Removes dev cluster review (and all assets in the review branch namespace)
+stop review:
+  stage: cleanup
+
+  extends:
+    - .undeploy_review
+    - .undeploy_review_rules
 
 
 #
@@ -87,18 +105,21 @@ deploy to production:
 #
 #
 #
-variables:                    # other global variables are set in GitLab Admin
-  CLUSTER_NAME: "dev-cp"      # options: dev-cp, dev-vsm
-  GENERIC_DEPLOYMENT: ""
+variables:                      # other global variables are set in GitLab Admin
+  CLUSTER_NAME: "dev-cp"        # options: dev-cp, dev-vsm
+  GENERIC_DEPLOYMENT: "true"
   #
-  #   - if GENERIC_DEPLOYMENT="anything but true", the pipeline expects a deployment package
+  #   - if GENERIC_DEPLOYMENT is set to anything but "true", the pipeline expects a deployment package
   #     to exist in the "Deployments" GitLab group. Create a deployment package following the
   #     guide in "Deployments/CI Config".
   #
-  #   - also see https://infrastructure-documentation.dev.ltc.bcit.ca/ for additional info.
+  #   - see https://infrastructure-documentation.dev.ltc.bcit.ca/ for additional info.
   #
-  DEPLOYMENT_PACKAGE_PROJECT_ID: 345
-  # COMMON_NAMESPACE: "qcon"    # combine apps into one namespace; otherwise, set to ""
+  # DEPLOY_PKG_INIT: "true"       # to create an initial project deployment package
+  # DEPLOY_PKG_PROJECT_ID: ""
+#
+# Other possible values
+  # COMMON_NAMESPACE: ""      # combine apps into one namespace
 #
 #
 #
@@ -107,19 +128,20 @@ variables:                    # other global variables are set in GitLab Admin
 #
 #
 ## Other common pipeline variables
-  VAULT_AUTH_ROLE: "dependabot-$CI_PROJECT_NAME"
   GIT_FETCH_EXTRA_FLAGS: "--tags"
-  PIPELINE_DEBUG: "true"
+  VAULT_AUTH_ROLE: "$CI_PROJECT_NAME-dependabot"
 
 ## Include common scripts
 include:
   - project: 'deployments/ci-config'
     file: 
-      - '.get-info.yml'
-      - '.build.yml'
-      - '.hydrate-deploy.yml'
-      - '.rules.yml'
-      - '.debug.yml'
+      - 'project-init.yml'
+      - 'get-info.yml'
+      - 'build.yml'
+      - 'deploy.yml'
+      - '.deploy-hydrate.yml'
+      - '.vault.yml'
+      - '.rules-debug.yml'
 
 ## Specify which runner should pick up pipeline jobs
 default:
