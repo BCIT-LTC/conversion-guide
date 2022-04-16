@@ -142,7 +142,7 @@ include:
       - 'deploy.yml'
       - '.deploy-hydrate.yml'
       - '.vault.yml'
-      - '.rules-debug.yml'
+      - '.rules.yml'
 
 ## Specify which runner should pick up pipeline jobs
 default:
