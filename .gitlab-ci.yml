@@ -11,6 +11,7 @@
 #   3. Deploy to a cluster
 #     - main branch deploys to staging/production; other branches deploy to a dev cluster for review
 
+
 stages:
   - get info
   - publish
@@ -26,6 +27,7 @@ project init:
   variables:
     GITLAB_PROJECT_NAME: "${CI_PROJECT_NAME}"
     GITLAB_PROJECT_ID: "${CI_PROJECT_ID}"
+    DEPLOY_PKG_GROUP: "${CI_PROJECT_ROOT_NAMESPACE}"
 
   extends:
     - .project_init
