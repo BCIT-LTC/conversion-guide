@@ -39,6 +39,7 @@ build image:
   stage: publish
   extends:
     - .build_image
+    - .build_image_rules
 
 
 ## Deploy feat/fix branch package to dev cluster for review
