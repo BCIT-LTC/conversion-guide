@@ -22,12 +22,6 @@ stages:
 #     please wait 5 minutes and re-try after a token has been created.
 project init:
   stage: get info
-
-  variables:
-    GITLAB_PROJECT_NAME: "${CI_PROJECT_NAME}"
-    GITLAB_PROJECT_ID: "${CI_PROJECT_ID}"
-    DEPLOY_PKG_GROUP: "${CI_PROJECT_ROOT_NAMESPACE}"
-
   extends:
     - .project_init
 
@@ -122,11 +116,11 @@ variables:                      # other global variables are set in GitLab Admin
   #
   #   - see https://infrastructure-documentation.dev.ltc.bcit.ca/ for additional info.
   #
-  DEPLOY_PKG_INIT: "true"       # to create an initial project deployment package
+  # DEPLOY_PKG_INIT: "true"       # to create an initial project deployment package
   # DEPLOY_PKG_PROJECT_ID: ""
 #
 # Other possible values
-  # COMMON_NAMESPACE: ""      # combine apps into one namespace
+  # COMMON_NAMESPACE: "qcon"      # combine apps into one namespace
 #
 #
 #
@@ -136,7 +130,6 @@ variables:                      # other global variables are set in GitLab Admin
 #
 ## Other common pipeline variables
   PIPELINE_DEBUG: "true"
-  GIT_FETCH_EXTRA_FLAGS: "--tags"
   VAULT_AUTH_ROLE: "$CI_PROJECT_NAME-dependabot"
 
 ## Include common scripts
