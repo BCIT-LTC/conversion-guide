@@ -16,9 +16,9 @@ WORKDIR /usr/share/nginx/html/
 
 RUN rm -rf ./*
 
+COPY --from=builder /app/assets ./assets
 COPY --from=builder /app/css ./css
 COPY --from=builder /app/js ./js
-COPY --from=builder /app/assets ./assets
 COPY --from=builder /app/pages ./pages
 COPY --from=builder /app/partials ./partials
 COPY --from=builder /app/index.html .
