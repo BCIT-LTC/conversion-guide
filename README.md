@@ -20,6 +20,21 @@ npm run build
 
 Use the following to start development:
 
-```bash
-npm run watch
-```
+1. Run `docker compose` to develop and watch changes using browsersync (visit localhost:3000 in your browser).
+
+    ```bash
+    docker compose up --build
+    ```
+
+1. Commit your changes
+1. Preview your changes by clicking the "view app" button on the MR pipeline section
+
+    ![view-app](./assets/view-app.png)
+
+1. Request a code review by marking your MR as "ready" and assigning the MR to a reviewer.
+
+    ![mark-ready](./assets/mark-ready.png)
+
+    When approved, you can merge the MR.
+
+For more information, see the [development documentation](https://stable.dev.ltc.bcit.ca/infrastructure-documentation/).
