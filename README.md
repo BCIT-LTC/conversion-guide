@@ -12,13 +12,12 @@ The Course Production Conversion Guide is an online reference for anybody that d
 
 ## For developers
 
-To work on the project, you will need to compile sass. 
+To work on the project, you will need to run [Docker Compose](https://docs.docker.com/get-docker/).
 
-```bash
-npm run build
-```
+1. Create an issue describing the intended change
+1. Create a merge request and a branch prefixed with either *feat/* or *fix/*.
 
-Use the following to start development:
+    ![create-mr](./assets/create-mr.png)
 
 1. Run `docker compose` to develop and watch changes using browsersync (visit localhost:3000 in your browser).
 
