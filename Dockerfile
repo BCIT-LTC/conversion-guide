@@ -27,6 +27,6 @@ COPY --from=builder /app/.env .env
 # Release/production
 FROM nginxinc/nginx-unprivileged AS release
 
-WORKDIR /usr/share/nginx/html/
+WORKDIR /usr/share/nginx/html
 
 COPY --from=cleaner /usr/share/nginx/html/ ./
