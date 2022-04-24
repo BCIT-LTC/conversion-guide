@@ -10,7 +10,6 @@ COPY . ./
 
 RUN npm run build
 
-
 ## Clean
 
 FROM nginx:alpine AS cleaner
@@ -26,7 +25,6 @@ COPY --from=builder /app/pages ./pages
 COPY --from=builder /app/partials ./partials
 COPY --from=builder /app/index.html ./
 COPY --from=builder /app/.env .env
-
 
 ## Release/production
 
