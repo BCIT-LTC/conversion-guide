@@ -11,7 +11,7 @@ RUN npm run build
 # Clean
 FROM nginx:alpine AS cleaner
 
-WORKDIR /usr/share/nginx/html/
+WORKDIR /usr/share/nginx/html
 
 RUN rm -rf ./*
 
