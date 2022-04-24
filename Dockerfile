@@ -3,10 +3,9 @@ FROM node:14 AS builder
 
 WORKDIR /app
 
-COPY . .
+COPY . ./
 
 RUN npm run build
-
 
 
 # Clean
@@ -21,9 +20,8 @@ COPY --from=builder /app/css ./css
 COPY --from=builder /app/js ./js
 COPY --from=builder /app/pages ./pages
 COPY --from=builder /app/partials ./partials
-COPY --from=builder /app/index.html .
+COPY --from=builder /app/index.html ./
 COPY --from=builder /app/.env .env
-
 
 
 # Release/production
@@ -31,4 +29,4 @@ FROM nginxinc/nginx-unprivileged AS release
 
 WORKDIR /usr/share/nginx/html/
 
-COPY --from=cleaner /usr/share/nginx/html/ .
+COPY --from=cleaner /usr/share/nginx/html/ ./
