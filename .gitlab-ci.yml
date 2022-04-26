@@ -1,28 +1,45 @@
-# You can override the included template(s) by including variable overrides
-# SAST customization: https://docs.gitlab.com/ee/user/application_security/sast/#customizing-the-sast-settings
-# Secret Detection customization: https://docs.gitlab.com/ee/user/application_security/secret_detection/#customizing-settings
-# Dependency Scanning customization: https://docs.gitlab.com/ee/user/application_security/dependency_scanning/#customizing-the-dependency-scanning-settings
-# Container Scanning customization: https://docs.gitlab.com/ee/user/application_security/container_scanning/#customizing-the-container-scanning-settings
-# Note that environment variables can be set in several places
-# See https://docs.gitlab.com/ee/ci/variables/#cicd-variable-precedence
+# Default LTC GitLab CI/CD Source Project Pipeline
+#
+## Requirements
+#   - this file, with "CLUSTER_NAME" set (bottom of script)
+#   - `Dockerfile` in project root
+#   - (optional) deployment package
+#
+## General Pipeline Steps
+#   1. Gather info
+#   2. Build Image
+#   3. Deploy to a cluster
+#     - main branch deploys to staging/production; other branches deploy to a dev cluster for review
+
 stages:
 - get info
+- test
 - publish
 - cleanup
-- test
+
+## Project initialization
+#   - a project access token is required, and created on the first run. If the pipeline fails,
+#     please wait 5 minutes and re-try after a token has been created.
 project init:
   stage: get info
   extends:
   - ".project_init"
+
+## Determine if there are existing git tags or a new tag is required
 get info:
   stage: get info
   extends:
   - ".get_info"
+
+## Build image and push to project registry
 build image:
   stage: publish
   extends:
   - ".build_image"
   - ".build_image_rules"
+
+## Deploy feat/fix branch package to dev cluster for review
+#   - must have a deployment package with a `dev` overlay
 deploy review:
   stage: publish
   variables:
@@ -30,6 +47,10 @@ deploy review:
   extends:
   - ".deploy_review"
   - ".deploy_review_rules"
+
+## Deploy staging/production packages
+#   - must have a deployment package with `staging` and `production` overlays
+#   - triggers pipelines in "Deployments/{projectName}" project
 deploy to staging:
   stage: publish
   variables:
@@ -54,15 +75,47 @@ deploy to production:
     url: https://${PROD_HOST}/${CI_PROJECT_NAME}
   tags:
   - production
+
+## Removes dev cluster review (and all assets in the review branch namespace)
 stop review:
   stage: cleanup
   extends:
   - ".undeploy_review"
   - ".undeploy_review_rules"
-variables:
-  CLUSTER_NAME: dev-cp
+
+#
+#
+#
+## ---------- Pipeline configuration ----------
+#
+#
+#
+variables:                          # other global variables are set in GitLab Admin
+  CLUSTER_NAME: dev-cp              # options: dev-cp, dev-vsm
+  # GENERIC_DEPLOYMENT: "true"
+  #
+  #   - if GENERIC_DEPLOYMENT is set to anything but "true", the pipeline expects a deployment package
+  #     to exist in the "Deployments" GitLab group. Create a deployment package following the
+  #     guide in "Deployments/CI Config".
+  #
+  #   - see https://infrastructure-documentation.dev.ltc.bcit.ca/ for additional info.
+  #
+  # DEPLOY_PKG_INIT: "true"       # to create an initial project deployment package
   DEPLOY_PKG_PROJECT_ID: '404'
+#
+# Other possible values
+  # COMMON_NAMESPACE: ""      # combine apps into one namespace
+#
+#
+#
+## ---------- It's generally bad to change anything below here ----------
+#
+#
+#
+## Other common pipeline variables
   PIPELINE_DEBUG: 'true'
+
+## Include common scripts
 include:
 - project: deployments/ci-config
   file:
@@ -77,9 +130,13 @@ include:
 - template: Jobs/Secret-Detection.gitlab-ci.yml
 - template: Security/License-Scanning.gitlab-ci.yml
 - template: Security/Container-Scanning.gitlab-ci.yml
+
+## Specify which runner should pick up pipeline jobs
 default:
   tags:
   - "${CLUSTER_NAME}"
+
+## Configure merge request pipelines
 workflow:
   rules:
   - if: $CI_COMMIT_BRANCH && $CI_OPEN_MERGE_REQUESTS && $CI_PIPELINE_SOURCE == "push"
@@ -87,5 +144,7 @@ workflow:
   - if: "$CI_COMMIT_BRANCH && $CI_OPEN_MERGE_REQUESTS"
     when: never
   - if: $CI_PIPELINE_SOURCE == "merge_request_event" || $CI_COMMIT_BRANCH || $CI_COMMIT_TAG
+
+## Configure security scanning
 sast:
   stage: test
