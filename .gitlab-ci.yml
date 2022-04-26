@@ -73,7 +73,7 @@ include:
   - ".deploy-hydrate.yml"
   - ".vault.yml"
   - ".rules.yml"
-- template: Security/SAST.gitlab-ci.yml
+- template: Jobs/SAST.gitlab-ci.yml
 default:
   tags:
   - "${CLUSTER_NAME}"
