@@ -74,6 +74,9 @@ include:
   - ".vault.yml"
   - ".rules.yml"
 - template: Jobs/SAST.gitlab-ci.yml
+- template: Jobs/Secret-Detection.gitlab-ci.yml
+- template: Security/License-Scanning.gitlab-ci.yml
+- template: Security/Container-Scanning.gitlab-ci.yml
 default:
   tags:
   - "${CLUSTER_NAME}"
