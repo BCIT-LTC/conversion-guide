@@ -134,6 +134,10 @@ default:
   tags:
   - "${CLUSTER_NAME}"
 
+## Configure security scanning
+sast:
+  stage: test
+
 ## Configure merge request pipelines
 workflow:
   rules:
@@ -142,7 +146,3 @@ workflow:
   - if: "$CI_COMMIT_BRANCH && $CI_OPEN_MERGE_REQUESTS"
     when: never
   - if: $CI_PIPELINE_SOURCE == "merge_request_event" || $CI_COMMIT_BRANCH || $CI_COMMIT_TAG
-
-## Configure security scanning
-sast:
-  stage: test
