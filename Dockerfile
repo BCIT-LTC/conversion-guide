@@ -30,6 +30,8 @@ COPY --from=builder /app/.env .env
 
 FROM nginxinc/nginx-unprivileged AS release
 
+LABEL maintainer courseproduction@bcit.ca
+
 WORKDIR /usr/share/nginx/html
 
 COPY --from=cleaner /usr/share/nginx/html/ ./
