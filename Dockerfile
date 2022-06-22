@@ -1,5 +1,6 @@
 # Dockerfile
 
+
 ## Build
 
 FROM node:14 AS builder
@@ -9,6 +10,7 @@ WORKDIR /app
 COPY . ./
 
 RUN npm run build
+
 
 ## Clean
 
@@ -25,6 +27,7 @@ COPY --from=builder /app/pages ./pages
 COPY --from=builder /app/partials ./partials
 COPY --from=builder /app/index.html ./
 COPY --from=builder /app/.env .env
+
 
 ## Release/production
 
