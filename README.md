@@ -12,7 +12,7 @@ The Course Production Conversion Guide is an online reference for anybody that d
 
 ## For developers
 
-To work on the project, you will need to run [Docker Compose](https://docs.docker.com/get-docker/).
+To work on the project, get [Docker Compose](https://docs.docker.com/get-docker/).
 
 1. Create an issue describing the intended change
 1. Create a merge request and a branch prefixed with either *feat/* or *fix/*.
