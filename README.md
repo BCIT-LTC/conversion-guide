@@ -10,6 +10,7 @@ The Course Production Conversion Guide is an online reference for anybody that d
 1. HTML - How to use a feature in HTML format
 1. Notes - Notes about various features
 
+
 ## For developers
 
 To work on the project, get [Docker Compose](https://docs.docker.com/get-docker/).
