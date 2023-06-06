@@ -12,12 +12,14 @@ commonLabels:
 commonAnnotations:
   version: stable # {"$imagepolicy": "conversion-guide:conversion-guide:tag"}
 
-configMapGenerator:
-  - name: elasticapm-config
-    literals:
-      - ELASTIC_APM_SERVICE_NAME=conversion-guide-stable
-      - ELASTIC_APM_SERVER_URL=https://bcit-ltc.apm.westus2.azure.elastic-cloud.com
+images:
+  - name: "conversion-guide"
+    newName: "registry.ltc.bcit.ca/web-apps/conversion-guide"
+    newTag: "stable" # {"$imagepolicy": "conversion-guide:conversion-guide:tag"}
 
+
+# Adds elasticapm config to deployment
+#
 patches:
   - target:
       kind: Deployment
@@ -26,7 +28,11 @@ patches:
         path: /spec/template/spec/containers/0/envFrom
         value: [{"configMapRef": {"name":"elasticapm-config"}}]
 
-images:
-  - name: "conversion-guide"
-    newName: "registry.ltc.bcit.ca/web-apps/conversion-guide"
-    newTag: "stable" # {"$imagepolicy": "conversion-guide:conversion-guide:tag"}
+
+# Generates elasticapm config
+#
+configMapGenerator:
+  - name: elasticapm-config
+    literals:
+      - ELASTIC_APM_SERVICE_NAME=conversion-guide-stable
+      - ELASTIC_APM_SERVER_URL=https://bcit-ltc.apm.westus2.azure.elastic-cloud.com
