@@ -10,8 +10,7 @@ commonLabels:
   environment: stable
 
 commonAnnotations:
-  version: stable # {"$imagepolicy": "flux-system:conversion-guide:tag"}
-  tag: ${GIT_TAG:=stable}
+  version: stable # {"$imagepolicy": "conversion-guide:conversion-guide:tag"}
 
 configMapGenerator:
   - name: elasticapm-config
@@ -30,4 +29,4 @@ patches:
 images:
   - name: "conversion-guide"
     newName: "registry.ltc.bcit.ca/web-apps/conversion-guide"
-    newTag: "stable" # {"$imagepolicy": "flux-system:conversion-guide:tag"}
+    newTag: "stable" # {"$imagepolicy": "conversion-guide:conversion-guide:tag"}
