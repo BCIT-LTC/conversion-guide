@@ -1,0 +1,34 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+namespace: conversion-guide
+resources:
+  - ../../base
+commonLabels:
+  environment: latest
+commonAnnotations:
+  version: v1.1.14-7091a923 # {"$imagepolicy": "conversion-guide:conversion-guide:tag"}
+images:
+  - name: "conversion-guide"
+    newName: "registry.ltc.bcit.ca/web-apps/conversion-guide"
+    newTag: "7091a923" # {"$imagepolicy": "conversion-guide:conversion-guide:tag"}
+patches:
+# Patches ingress to add "latest--" prefix to ingress URL
+#
+  - target:
+      kind: Ingress
+    path: ingress-patch.yaml
+# Adds elasticapm config to deployment
+#
+  - target:
+      kind: Deployment
+    patch: |-
+      - op: add
+        path: /spec/template/spec/containers/0/envFrom
+        value: [{"configMapRef": {"name":"elasticapm-config"}}]
+# Generates elasticapm config
+#
+configMapGenerator:
+  - name: elasticapm-config
+    literals:
+      - ELASTIC_APM_SERVICE_NAME=conversion-guide-latest
+      - ELASTIC_APM_SERVER_URL=https://bcit-ltc.apm.westus2.azure.elastic-cloud.com
