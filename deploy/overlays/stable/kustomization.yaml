@@ -1,23 +1,16 @@
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
-
 namespace: conversion-guide
-
 resources:
   - ../../base
-
 commonLabels:
   environment: stable
-
 commonAnnotations:
-  version: stable # {"$imagepolicy": "conversion-guide:conversion-guide:tag"}
-
+  version: 1.2.0 # {"$imagepolicy": "conversion-guide:conversion-guide:tag"}
 images:
   - name: "conversion-guide"
     newName: "registry.ltc.bcit.ca/web-apps/conversion-guide"
-    newTag: "stable" # {"$imagepolicy": "conversion-guide:conversion-guide:tag"}
-
-
+    newTag: "1.2.0" # {"$imagepolicy": "conversion-guide:conversion-guide:tag"}
 # Adds elasticapm config to deployment
 #
 patches:
@@ -27,8 +20,6 @@ patches:
       - op: add
         path: /spec/template/spec/containers/0/envFrom
         value: [{"configMapRef": {"name":"elasticapm-config"}}]
-
-
 # Generates elasticapm config
 #
 configMapGenerator:
