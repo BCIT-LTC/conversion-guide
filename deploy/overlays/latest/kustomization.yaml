@@ -6,11 +6,11 @@ resources:
 commonLabels:
   environment: latest
 commonAnnotations:
-  version: 1.2.1-60f6fe89--2023-06-12.1686592364 # {"$imagepolicy": "conversion-guide:conversion-guide:tag"}
+  version: 1.2.0-124199c8--2023-06-06.1686020575 # {"$imagepolicy": "conversion-guide:conversion-guide-image-policy-image-policy:tag"}
 images:
   - name: "conversion-guide"
     newName: "registry.ltc.bcit.ca/web-apps/conversion-guide"
-    newTag: "1.2.1-60f6fe89--2023-06-12.1686592364" # {"$imagepolicy": "conversion-guide:conversion-guide:tag"}
+    newTag: "1.2.0-124199c8--2023-06-06.1686020575" # {"$imagepolicy": "conversion-guide:conversion-guide-image-policy-image-policy:tag"}
 patches:
   # Patches ingress to add "latest--" prefix to ingress URL
   #

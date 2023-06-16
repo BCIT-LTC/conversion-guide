@@ -6,11 +6,14 @@ resources:
 commonLabels:
   environment: stable
 commonAnnotations:
-  version: 1.2.1 # {"$imagepolicy": "conversion-guide:conversion-guide:tag"}
+  version: stable # {"$imagepolicy": "conversion-guide:conversion-guide-image-policy:tag"}
+
 images:
   - name: "conversion-guide"
     newName: "registry.ltc.bcit.ca/web-apps/conversion-guide"
-    newTag: "1.2.1" # {"$imagepolicy": "conversion-guide:conversion-guide:tag"}
+    newTag: "stable" # {"$imagepolicy": "conversion-guide:conversion-guide-image-policy:tag"}
+
+
 # Adds elasticapm config to deployment
 #
 patches:
