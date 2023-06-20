@@ -10,8 +10,8 @@ patches:
     path: ingress-patch.yaml
 namespace: default # kpt-set: ${DEPLOY_NAMESPACE}
 commonAnnotations:
-  version: 2.4.1-8b09e849--2023-04-22--944 # kpt-set: ${GIT_TAG}
+  version: 2.4.1-8b09e849--2023-04-22--944 # {"$imagepolicy": "conversion-guide:conversion-guide-image-policy:tag"}
 images: # kpt-set: ${IMAGE_REF}
   - name: "conversion-guide"
     newName: "registry.ltc.bcit.ca/web-apps/conversion-guide"
-    newTag: "2.4.1-75ee1728--2023-04-23--257" # {"$imagepolicy": "flux-system:conversion-guide-web-image-policy:tag"}
+    newTag: "2.4.1-75ee1728--2023-04-23--257" # {"$imagepolicy": "conversion-guide:conversion-guide-image-policy:tag"}
