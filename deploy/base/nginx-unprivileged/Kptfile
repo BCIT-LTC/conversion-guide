@@ -10,7 +10,7 @@ upstream:
     repo: https://issues.ltc.bcit.ca/web-apps/base-packages
     directory: /nginx-unprivileged
     ref: v0.5
-  updateStrategy: resource-merge
+  updateStrategy: force-delete-replace
 upstreamLock:
   type: git
   git:
