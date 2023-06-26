@@ -17,6 +17,7 @@ gulp.task('build', css);
 
 // Watch and build files on change
 gulp.task('watch', function () {
+	css();
 	bs.init({
 		server: "./"
 	});
