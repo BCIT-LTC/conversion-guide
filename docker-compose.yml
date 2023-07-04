@@ -5,13 +5,13 @@ services:
     image: conversion-guide
     build:
       context: .
-      target: builder
-    command: npm run watch
+      target: cleaner
+    # command: npm run watch
     environment:
       - DEBUG=True
     working_dir: /app
     volumes:
       - .:/app
+      - ./deploy/base/nginx.conf:/etc/nginx/conf.d/nginx.conf
     ports:
-      - "3000:3000"
-      - "3001:3001"
+      - "8080:8080"
