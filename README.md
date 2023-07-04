@@ -37,4 +37,4 @@ To work on the project, get [Docker Compose](https://docs.docker.com/get-docker/
 
     When approved, you can merge the MR.
 
-For more information, see the [development documentation](https://stable.dev.ltc.bcit.ca/infrastructure-documentation/).
+For more information, see the [development documentation](https://infrastructure-documentation.ltc.bcit.ca/).
