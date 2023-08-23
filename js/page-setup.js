@@ -252,7 +252,7 @@
 	var $navBar = $("<nav>");
 	$navBar.addClass("nav-bar")
 		.append($menuButton.clone(true, true))
-		.append("<a class='nav-bar-title' href='home.html'></a>")
+		.append("<a class='nav-bar-title' href='/home'></a>")
 		.append("<a class='marker-reference' href='marker-reference'>" +
 			"<span>#Marker Reference</span>" +
 			"<div class='marker'>#</div></a>");
