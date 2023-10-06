@@ -3,6 +3,14 @@ kind: Kustomization
 namespace: conversion-guide
 resources:
   - ../../base
+# Prefix/Suffix required for VaultAuth configuration
+#
+namePrefix: conversion-guide-
+nameSuffix: -stable
+# Teach kustomize how to update generated names
+#
+configurations:
+  - kustomizeconfig.yaml
 commonLabels:
   environment: stable
 commonAnnotations:
@@ -11,19 +19,25 @@ images:
   - name: "conversion-guide"
     newName: "registry.ltc.bcit.ca/web-apps/conversion-guide"
     newTag: "1.2.10" # {"$imagepolicy": "conversion-guide:conversion-guide-image-policy-stable:tag"}
-# Adds elasticapm config to deployment
-#
 patches:
+  # Patches deployment with secrets
   - target:
       kind: Deployment
-    patch: |-
-      - op: add
-        path: /spec/template/spec/containers/0/envFrom
-        value: [{"configMapRef": {"name":"elasticapm-config"}}]
-# Generates elasticapm config
-#
+    path: deployment-patch.yaml
+  # Incorporate vault-secrets
+  #
+  # adds `-latest` suffix to VaultAuth `spec.mount`
+  - target:
+      kind: VaultAuth
+    path: vault-secrets-stable/vault-auth-patch.yaml
+components:
+  # Include environment-specific secrets
+  - ./vault-secrets-stable
+  # Required for VaultAuth role and serviceaccounts
+  - ../../base/components/vault-auth
 configMapGenerator:
+  # Updates elasticapm config
   - name: elasticapm-config
     literals:
       - ELASTIC_APM_SERVICE_NAME=conversion-guide-stable
-      - ELASTIC_APM_SERVER_URL=https://bcit-ltc.apm.westus2.azure.elastic-cloud.com
+    behavior: merge
