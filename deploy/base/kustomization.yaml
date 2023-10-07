@@ -6,15 +6,14 @@ resources:
   - ./nginx-unprivileged
   - ingress.yaml
 
-# Facilitate kustomization name updating
-#
-configurations:
-  - kustomizeconfig.yaml
-
 commonLabels:
   app: conversion-guide
   app.kubernetes.io/name: conversion-guide
 
+# Facilitate kustomization name updating
+#
+configurations:
+  - kustomizeconfig.yaml
 
 # Patch nginx base; simplify deployment name (json6902 patch instead of strategic merge)
 #
@@ -38,7 +37,6 @@ patches:
         path: /spec/template/spec/containers/0/envFrom
         value: [{"configMapRef": {"name":"elasticapm-config"}}]
 
-
 configMapGenerator:
   - name: config
     files:
@@ -50,6 +48,3 @@ configMapGenerator:
   - name: elasticapm-config
     literals:
       - ELASTIC_APM_SERVER_URL=https://bcit-ltc.apm.westus2.azure.elastic-cloud.com
-
-
-
