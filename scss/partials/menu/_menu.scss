@@ -24,7 +24,7 @@ $menu-transition-speed: .3s ease-out;
 	background: $nav-bar-background-color;
 	&.showing {
 		top: 0;
-		z-index: 3;
+		z-index: 1000000;
 	}
 	.menu-button {
 		height: 35px;
