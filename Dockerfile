@@ -2,7 +2,7 @@
 
 ## Build
 
-FROM node:16 AS builder
+FROM node:20.16.0-alpine3.20 AS builder
 
 WORKDIR /app
 

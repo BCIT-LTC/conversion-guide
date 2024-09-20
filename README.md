@@ -20,7 +20,7 @@ To work on the project, get [Docker Compose](https://docs.docker.com/get-docker/
 
     ![create-mr](./assets/create-mr.png)
 
-1. Run `docker compose` to develop and watch changes using browsersync (visit localhost:3000 in your browser).
+1. Run `docker compose up` (then visit localhost:3000 in your browser).
 
     ```bash
     docker compose up --build
