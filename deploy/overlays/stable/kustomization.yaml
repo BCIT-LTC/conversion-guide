@@ -13,11 +13,11 @@ nameSuffix: -stable
 configurations:
   - kustomizeconfig.yaml
 commonAnnotations:
-  version: 1.2.11 # {"$imagepolicy": "conversion-guide:conversion-guide-image-policy-stable:tag"}
+  version: 1.3.1 # {"$imagepolicy": "conversion-guide:conversion-guide-image-policy-stable:tag"}
 images:
   - name: "conversion-guide"
     newName: "registry.ltc.bcit.ca/web-apps/conversion-guide"
-    newTag: "1.2.11" # {"$imagepolicy": "conversion-guide:conversion-guide-image-policy-stable:tag"}
+    newTag: "1.3.1" # {"$imagepolicy": "conversion-guide:conversion-guide-image-policy-stable:tag"}
 patches:
   # Patches deployment with secrets
   - target:
