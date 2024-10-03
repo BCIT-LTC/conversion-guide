@@ -25,6 +25,7 @@ COPY --from=builder /app/js ./js
 COPY --from=builder /app/pages ./pages
 COPY --from=builder /app/partials ./partials
 COPY --from=builder /app/index.html ./
+COPY nginx.conf /etc/nginx/nginx.conf
 
 
 ## Release/production
@@ -36,3 +37,6 @@ LABEL maintainer courseproduction@bcit.ca
 WORKDIR /usr/share/nginx/html
 
 COPY --from=cleaner /usr/share/nginx/html/ ./
+COPY nginx.conf /etc/nginx/nginx.conf
+
+EXPOSE 8080
