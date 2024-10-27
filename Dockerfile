@@ -1,7 +1,4 @@
-# Dockerfile
-
-## Build
-
+# Build
 FROM node:20.16.0-alpine3.20 AS builder
 
 WORKDIR /app
@@ -11,8 +8,7 @@ COPY . ./
 RUN npm run build
 
 
-## Clean
-
+# Clean
 FROM nginx:alpine AS cleaner
 
 WORKDIR /usr/share/nginx/html
@@ -28,8 +24,7 @@ COPY --from=builder /app/index.html ./
 COPY nginx.conf /etc/nginx/nginx.conf
 
 
-## Release/production
-
+# Release/production
 FROM nginxinc/nginx-unprivileged AS release
 
 LABEL maintainer courseproduction@bcit.ca
@@ -38,5 +33,3 @@ WORKDIR /usr/share/nginx/html
 
 COPY --from=cleaner /usr/share/nginx/html/ ./
 COPY nginx.conf /etc/nginx/nginx.conf
-
-EXPOSE 8080
