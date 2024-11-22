@@ -1,0 +1,29 @@
+trigger:
+- main
+
+pool:
+   vmImage: 'ubuntu-latest'
+
+steps:
+# - task: AzureKeyVault@2
+#   displayName: Azure Key Vault
+#   inputs:
+#     azureSubscription: 'SERVICE_CONNECTION_NAME'
+#     KeyVaultName: 'KEY_VAULT_NAME'
+#     SecretsFilter: '*'
+#     RunAsPreJob: false
+- task: AzureContainerApps@1
+  inputs:
+    azureSubscription: 'sc://kylehunter/conversion-guide/kh'
+    acrName: 'ltctestregistry'
+    acrUsername: $(acrUsername)
+    acrPassword: $(acrPassword)
+    imageToBuild: 'qcon-api-devops'
+    imageToDeploy: 'qcon-api-devops'
+    containerAppName: 'qcon-api-devops'
+    resourceGroup: 'ltc-test-qcon-api-devops'
+    containerAppEnvironment: 'ltc-test-container-environment'
+    targetPort: '8000'
+    location: 'Canada Central'
+    environmentVariables: 'ADMIN_USERNAME=admin ADMIN_PASSWORD=admin API_KEY=1234567890 DJANGO_SECRET_KEY=notveryS3cret'
+    ingress: 'internal'
